@@ -1,0 +1,21 @@
+<h1>Summary for:  {{ stock.name }}</h1>
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 15px;
+}
+</style>
+<table style="width:100%">
+    <tr>
+        <td>Symbol</td>
+        <td>{{ stock.symbol }}</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td> {{ stock.description }}</td>
+    </tr>
+</table>

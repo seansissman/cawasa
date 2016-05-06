@@ -1,0 +1,9 @@
+{% if all_stocks_list %}
+    <ul>
+    {% for stock in all_stocks_list %}
+        <li><a href="/stocks/{{ stock.id }}/">{{ stock.symbol }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No stocks are available.</p>
+{% endif %}
