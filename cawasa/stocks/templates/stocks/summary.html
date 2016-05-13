@@ -18,4 +18,24 @@ th, td {
         <td>Description</td>
         <td> {{ stock.description }}</td>
     </tr>
+    <tr>
+        <td>Industry</td>
+        <td> {{ stock.industry }}</td>
+    </tr>
+    <tr>
+        <td>Sector</td>
+        <td> {{ stock.sector }}</td>
+    </tr>
+    <tr>
+        <td>Index(es)</td>
+        <td>
+        {% for i in stock.indexes.all %}
+           <li>{{ i }} ( {{ i.name }})</li>
+        {% endfor %}
+        </td>
+    </tr>
+        <tr>
+        <td>Type</td>
+        <td> {{ stock.type }}</td>
+    </tr>
 </table>
