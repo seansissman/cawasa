@@ -1,5 +1,7 @@
 <h1>Summary for:  {{ stock.name }}</h1>
 
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
 <style>
 table, th, td {
     border: 1px solid black;

@@ -1,7 +1,27 @@
+<style>
+#lookup{
+float:  right;
+}
+</style>
+
+<header>
+    <h1>Stocks List</h1>
+</header>
+
+<div id="lookup">
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Search" />
+</form>
+
+</div>
+<br><br>
+
 {% if all_stocks_list %}
     <ul>
     {% for stock in all_stocks_list %}
-        <li><a href="/stocks/{{ stock.id }}/">{{ stock.symbol }}</a></li>
+        <li><a href="{% url 'stocks:summary' stock.id %}">{{ stock.symbol }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
