@@ -11,27 +11,25 @@ from .forms import SymbolLookup
 
 
 def index(request):
-
+    lookup_stocks = None
     if request.method == 'POST':
         form = SymbolLookup(request.POST)
         if form.is_valid():
             symbol_lookup = form.cleaned_data['symbol_lookup']
-            stock = Stock.objects.filter(symbol__iexact=symbol_lookup)
-            if stock:
-                s = stock[0]
-                return HttpResponseRedirect(s.pk)
-#            else:
-#                return HttpResponseRedirect("")
-
-                #with symbol_lookup perform a query to find symbol id
+            try:
+                exact_match = Stock.objects.get(symbol__iexact=symbol_lookup)
+                return HttpResponseRedirect(exact_match.pk)
+            except:
+                lookup_stocks = Stock.objects.filter(symbol__icontains=symbol_lookup)
+                if not lookup_stocks:
+                    lookup_stocks = '0'
     else:
         form = SymbolLookup()
-
 
     #all_names = Stock.objects.values_list('symbol').order_by('symbol')
     all_names = Stock.objects.order_by('symbol')
     ##template = loader.get_template('stocks/index.html')
-    context = {'all_stocks_list': all_names, 'form': form}
+    context = {'all_stocks_list': all_names, 'form': form, 'stock_lookup_list': lookup_stocks}
     return render(request, 'stocks/index.html', context)
     ##return HttpResponse(template.render(context, request))
     #return HttpResponse("Hello, world. You're at the stocks index.")
