@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib import admin
+#from django.forms import CheckBoxSelectMultiple
 
 class Index(models.Model):
     name = models.CharField(max_length=50)

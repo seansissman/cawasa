@@ -8,6 +8,7 @@ from django.views import generic
 from django.views import generic
 from .models import Stock
 from .forms import SymbolLookup
+#import difflib
 
 
 def index(request):
@@ -20,7 +21,9 @@ def index(request):
                 exact_match = Stock.objects.get(symbol__iexact=symbol_lookup)
                 return HttpResponseRedirect(exact_match.pk)
             except:
-                lookup_stocks = Stock.objects.filter(symbol__icontains=symbol_lookup)
+                lookup_stocks = Stock.objects.filter(symbol__icontains=symbol_lookup).order_by('symbol')
+                #lookup_stocksss = [str(x[0]) for x in lookup_stockss]
+                #lookup_stocks = difflib.get_close_matches(symbol_lookup, lookup_stocksss)
                 if not lookup_stocks:
                     lookup_stocks = '0'
     else:
