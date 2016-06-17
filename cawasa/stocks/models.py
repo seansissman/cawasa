@@ -18,9 +18,9 @@ class Index(models.Model):
 class Stock(models.Model):
     name = models.CharField(max_length=50)
     symbol = models.CharField(max_length=8)
-    industry = models.CharField(max_length=30, blank=True)
-    sector = models.CharField(max_length=30, blank=True)
-    description = models.CharField(max_length=500, blank=True)
+    sector = models.CharField(max_length=50, blank=True)
+    industry = models.CharField(max_length=75, blank=True)
+    #description = models.CharField(max_length=500, blank=True)
     indexes = models.ManyToManyField(Index, blank=True)
 
     COMMON_STOCK = 'CS'

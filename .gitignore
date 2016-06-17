@@ -5,3 +5,6 @@ settings.py
 
 env/
 .idea/
+.*.swp
+cache/*
+
