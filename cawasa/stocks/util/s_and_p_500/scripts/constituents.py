@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
+from models import Stock, Index
 import contextlib
 import csv
 from os import mkdir
@@ -32,7 +33,10 @@ for row in rows:
         name = fields[1].string
         sector = fields[3].string
         industry = fields[4].string
-        records.append([symbol, name, sector, industry])
+
+        #records.append([symbol, name, sector, industry])
+        # Stocks.objects.create(symbol=symbol, name=name, sector=sector,industry=industry, index='S&P 500')
+
 
 header = ['Symbol', 'Name', 'Sector', 'Industry']
 writer = csv.writer(open('../data/cawasa_constituents.csv', 'w'), lineterminator='\n')

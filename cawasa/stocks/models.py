@@ -21,7 +21,7 @@ class Stock(models.Model):
     sector = models.CharField(max_length=50, blank=True)
     industry = models.CharField(max_length=75, blank=True)
     #description = models.CharField(max_length=500, blank=True)
-    indexes = models.ManyToManyField(Index, blank=True)
+    #indexes = models.ManyToManyField(Index, blank=True)
 
     COMMON_STOCK = 'CS'
     EXCHANGE_TRADED_FUND = 'ETF'
