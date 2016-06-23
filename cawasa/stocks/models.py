@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib import admin
 #from django.forms import CheckBoxSelectMultiple
 
+
 class Index(models.Model):
     name = models.CharField(max_length=50)
     symbol = models.CharField(max_length=8)
@@ -11,7 +12,6 @@ class Index(models.Model):
 
     def __str__(self):
         return self.symbol
-
 
 
 
@@ -38,5 +38,15 @@ class Stock(models.Model):
     def __str__(self):
         return self.name
 
+
+
+
+class Index_History(models.Model):
+    date = models.DateField()
+    index = models.ForeignKey(Index)
+    stock = models.ForeignKey(Stock)
+
+    def __str__(self):
+        return self.index + self.date
 
 
