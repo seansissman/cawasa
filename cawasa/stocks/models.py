@@ -5,15 +5,6 @@ from django.contrib import admin
 #from django.forms import CheckBoxSelectMultiple
 
 
-class Index(models.Model):
-    name = models.CharField(max_length=50)
-    symbol = models.CharField(max_length=8)
-    description = models.CharField(max_length=500, blank=True)
-
-    def __str__(self):
-        return self.symbol
-
-
 
 class Stock(models.Model):
     name = models.CharField(max_length=50)
@@ -39,14 +30,22 @@ class Stock(models.Model):
         return self.name
 
 
+class Index(models.Model):
+    name = models.CharField(max_length=50)
+    symbol = models.CharField(max_length=8)
+    description = models.CharField(max_length=500, blank=True)
+
+    def __str__(self):
+        return self.symbol
 
 
-class Index_History(models.Model):
+class IndexHistory(models.Model):
     date = models.DateField()
     index = models.ForeignKey(Index)
     stock = models.ForeignKey(Stock)
 
     def __str__(self):
-        return self.index + self.date
+        printable_date = self.date.strftime("%m/%d/%Y")
+        return printable_date + '\t' + str(self.index) + '\t' + str(self.stock)
 
 

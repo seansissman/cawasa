@@ -1,14 +1,15 @@
 from django.core.management.base import BaseCommand, CommandError
-from stocks.models import Stock, Index
+from stocks.models import Stock, Index, IndexHistory
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
+from datetime import date
 import contextlib
-import csv
-from os import mkdir
-from os.path import exists, join
-datadir = join('..', 'data')
-if not exists(datadir):
-    mkdir(datadir)
+#import csv
+#from os import mkdir
+#from os.path import exists, join
+#datadir = join('..', 'data')
+#if not exists(datadir):
+#    mkdir(datadir)
 
 #source_page = open('List_of_S%26P_500_companies.html').read()
 
@@ -18,7 +19,10 @@ class Command(BaseCommand):
     help = 'Updates the list of names in the S&P 500 index.'
 
     def handle(self, *args, **options):
+
+        sp_index_obj = self.get_or_create_sp_index()
         sp_url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+
 
         with contextlib.closing(urlopen(sp_url)) as source_page:
 
@@ -41,9 +45,27 @@ class Command(BaseCommand):
                 sector = fields[3].string
                 industry = fields[4].string
 
-                obj, created = Stock.objects.get_or_create(name=name, symbol=symbol, sector=sector, industry=industry)
-        self.stdout.write("Wrote S&P updated to DB.")
-                #obj.pk
+                stock_obj, stock_created = Stock.objects.get_or_create(name=name, symbol=symbol, sector=sector, industry=industry)
+                stock_pk = stock_obj.pk
+
+                IndexHistory.objects.get_or_create(date=date.today(), index=sp_index_obj, stock=stock_obj)
+
+        self.stdout.write("Wrote S&P updates to DB.")
+
+    def get_or_create_sp_index(self):
+        """ Return he primary key for the S&P 500 index. """
+        obj, created = Index.objects.get_or_create(
+            name='S&P 500',
+            symbol='.INX',
+            description='The Standard & Poor\'s 500, often abbreviated as the S&P 500, or just "the S&P", is an ' \
+                        'American stock market index based on the market capitalizations of 500 large companies ' \
+                        'having common stock listed on the NYSE or NASDAQ.'
+            )
+        return obj
+
+
+
+        #obj.pk
                 #records.append([symbol, name, sector, industry])
                 # Stocks.objects.create(symbol=symbol, name=name, sector=sector,industry=industry, index='S&P 500')
 
