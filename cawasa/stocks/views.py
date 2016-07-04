@@ -6,21 +6,23 @@ from django.http import Http404
 from django.template import loader
 from django.views import generic
 from django.views import generic
-from .models import Stock
+from .models import Stock, Index, IndexHistory
 from .forms import SymbolLookup
 #import difflib
 
 
 def index(request):
     lookup_stocks = None
-    if request.method == 'POST':
-        form = SymbolLookup(request.POST)
+    if request.method == 'POST':  # If loaded from form submission
+        form = SymbolLookup(request.POST)  # Form object with POST data
         if form.is_valid():
             symbol_lookup = form.cleaned_data['symbol_lookup']
             try:
+                # Try to get an exact match on POST data
                 exact_match = Stock.objects.get(symbol__iexact=symbol_lookup)
                 return HttpResponseRedirect(exact_match.pk)
             except:
+                #
                 lookup_stocks = Stock.objects.filter(symbol__icontains=symbol_lookup).order_by('symbol')
                 #lookup_stocksss = [str(x[0]) for x in lookup_stockss]
                 #lookup_stocks = difflib.get_close_matches(symbol_lookup, lookup_stocksss)
@@ -52,16 +54,29 @@ class SummaryView(generic.DetailView):
     template_name = 'stocks/summary.html'
 
 
+class IndexView(generic.ListView):
+    model = Index
+    template_name = 'stocks/indexes.html'
+
+
+class IndexHistoryView(generic.ListView):
+    model = IndexHistory
+    template_name = 'stocks/index_history.html'
+
+
+
 def index_names(request, index_id):
     return HttpResponse("This will return a list of names in index %s" % index_id)
 
 
-def symbol_lookup(request):
-    if request.method == 'POST':
-        form = SymbolLookup(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
-    else:
-        form = SymbolLookup()
 
-    return render(request, 'stocks/index.html', {'form': form})
+
+#def symbol_lookup(request):
+##    if request.method == 'POST':
+#        form = SymbolLookup(request.POST)
+#        if form.is_valid():
+#            return HttpResponseRedirect('/thanks/')
+#    else:
+#        form = SymbolLookup()#
+
+#    return render(request, 'stocks/index.html', {'form': form})

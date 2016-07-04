@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> CAWASA </title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stocks/style.css' %}" />
+<body>
+
+{% block header %}
+    <header id="page-header">
+        <span id="header-logo">CAWASA</span>
+        <ul class="navbar">
+            <li class="navbar"><a href="/stocks/">STOCKS</a></li>
+            <li class="navbar"><a href="/stocks/indexes/">INDEXES</a></li>
+        </ul>
+    </header>
+{% endblock header %}
+
+{% block content %}
+{% endblock content %}
+
+</body>
+</html>

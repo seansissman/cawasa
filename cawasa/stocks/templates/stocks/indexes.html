@@ -1,0 +1,46 @@
+{% extends 'stocks/base.html' %}
+
+{% block content %}
+<div id="main-box">
+
+    <div id="list-title">
+        <h1 style="float: left; display: inline;">Stock Index List</h1>
+    </div>
+        <style>
+            .symbol-box {
+                display: inline;
+                float: left;
+                margin: 10px 0;
+                width: 5%;
+            }
+            .gap-box{
+                display: inline;
+                float: left;
+                margin: 10px 0;
+                width: 5%;
+            }
+            .name-box {
+                display: inline;
+                float: left;
+                margin: 10px 0;
+                width: 30%;
+            }
+        </style>
+        <div id="data-list">
+        {% for index in object_list %}
+            <ul style="list-style-type: none">
+                <li>
+                    <a class="list" href="none">
+                        <div class="symbol-box">{{ index.symbol }}</div>
+                        <div class="gap-box">--</div>
+                        <div class="name-box">{{ index.name }}</div>
+                        </br></br>
+                    <a/>
+                </li>
+            </ul>
+        {% endfor %}
+        </div>
+
+</div>
+
+{% endblock content %}

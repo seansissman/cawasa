@@ -1,60 +1,52 @@
-<!DOCTYPE html>
-<html>
-<body>
-<style>
-    *{
-    font-family: arial;
-    }
-</style>
+{% extends 'stocks/base.html' %}
 
-</style>
-<style>
-#lookup{
-float:  right;
-}
-</style>
+{% block content %}
 
-<header style="float:left">
-    <h1>Stocks List</h1>
-</header>
+<div id="main-box">
 
-<div id="lookup">
-    <form action="" method="POST">
-        {% csrf_token %}
-        <!--{{ form }}  Uses standard django form-->
-        {% for field in form %}
-            {{ field.label_tag }} {{ field }}
-        {% endfor %}
-        <input type="submit" value="Search" />
-        {% for field in form %}
-        <p><h3>{% for error in field.errors %}{{ error }}{% endfor %}</h3></p>
-        {% endfor %}
-    </form>
-    {% if stock_lookup_list %}
-        {% if stock_lookup_list == '0' %}
-            <h3>No matches.</h3>
-        {% else %}
-            <h3>Possible Lookup Matches:</h3>
-            <ul style="list-style-type:none">
-                {% for stock in stock_lookup_list %}
-                    <li><a href="{% url 'stocks:summary' stock.id %}">{{ stock.symbol }}</a></li>
+    <div id="list-title">
+        <h1 style="float: left; display: inline;">Stock Symbols</h1>
+        <div id="stock-symbol-lookup">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <!--{{ form }}  Uses standard django form-->
+                {% for field in form %}
+                    {{ field.label_tag }} {{ field }}
+                {% endfor %}
+                <input type="submit" value="Search" />
+            </form>
+        </div>
+    </div>
+
+    <div id="stock-symbol-lookup-results">
+        {% if stock_lookup_list %}
+            {% if stock_lookup_list == '0' %}
+                <h3>No matches.</h3>
+            {% else %}
+                <h5>Possible Lookup Matches:</h5>
+                <ul style="list-style-type:none">
+                    {% for stock in stock_lookup_list %}
+                        <li><a class="list" href="{% url 'stocks:summary' stock.id %}">{{ stock.symbol }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endif %}
+    </div>
+
+
+
+    <div id="data-list">
+        {% if all_stocks_list %}
+            <ul>
+                {% for stock in all_stocks_list %}
+                    <li><a class="list" href="{% url 'stocks:summary' stock.id %}">{{ stock.symbol }}</a></li>
                 {% endfor %}
             </ul>
+        {% else %}
+            <p>No stocks are available.</p>
         {% endif %}
-    {% endif %}
+    </div>
+
 </div>
 
-<br><br><br><br>
-<p>
-{% if all_stocks_list %}
-    <ul>
-    {% for stock in all_stocks_list %}
-        <li><a href="{% url 'stocks:summary' stock.id %}">{{ stock.symbol }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No stocks are available.</p>
-{% endif %}
-</p>
-</body>
-</html>
+{% endblock content %}

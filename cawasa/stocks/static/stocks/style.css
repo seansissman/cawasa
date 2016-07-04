@@ -1,0 +1,130 @@
+    body {
+        background-color: rgb(32,32,32);
+        color: rgb(255,0,0);
+        font-family: "Arial";
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    table, th, td {
+        border: 2px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 15px;
+    }
+
+    a.list:link { color: rgb(255,255,255); text-decoration: none; }
+
+    a.list:visited { color: rgb(128,128,128); text-decoration: none; }
+
+    a.list:hover { text-decoration: none; color: rgb(0,192,32); }
+
+    a.list:active { text-decoration: underline; }
+
+    ul.navbar {
+        list-style-type: none;
+        display: inline;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+    }
+
+    li.navbar {
+            margin: 0;
+        float: left;
+    }
+
+    li.navbar a:link {
+        margin: 0;
+        text-decoration: none;
+        color: rgb(255,255,255);
+        font-family:"Arial";
+        font-size: 15px;
+        display: block;
+        height: 100%;
+        padding: 0 20px 0 20px;
+        text-align: center;
+    }
+
+    li.navbar a:visited { color: white; text-decoration: none;         margin: 0;}
+
+    li.navbar a:hover { text-decoration: none;
+                        padding: 0 20px 0 20px;
+                        background-color: rgb(128,128,128);
+                                margin: 0;}
+
+    li.navbar a:active { text-decoration: underline;         margin: 0;}
+
+    #page-header {
+        font-family: "Lucida Console";
+        top: 0px;
+        padding-left: 25px;
+        margin: 0;
+        height: 55px;
+        width: 100%;
+        line-height: 55px;
+        font-size: 28px;
+        color: rgb(192,192,192);
+        background-color: rgb(64,64,64);
+        position: fixed;
+        z-index: 99;
+        /*text-decoration: underline;*/
+    }
+
+    #header-logo {
+        margin: 0px 150px 0px 0px;  padding: 0;
+        line-height: 55px;
+    }
+
+    #main-box {
+        margin: 55px 0 0 0;
+        padding: 0px 50px;
+        color: rgb(51,204,51);
+        background-color: rgb(32,32,32);
+        height: 100%;
+    }
+
+    #data-list {
+        position: relative;
+        top: 135px;
+    }
+
+
+#stock-symbol-lookup{
+    font-family: "Arial";
+    font-size: 15px;
+    float: right;
+    right: 45px;
+    line-height: 20px;
+    padding-top: 20px;
+
+}
+
+#stock-symbol-lookup-results {
+    right: 120px;
+    float: right;
+    position: relative;
+    top: 115px;
+    z-index: 98;
+}
+
+#list-title {
+    background-color: rgb(32,32,32);
+    margin: 0;
+    border-bottom: 3px solid rgb(64,64,64);
+    position:fixed;
+    right: 50px;
+    left: 50px;
+    padding: 40px 20px 0px 20px;
+    white-space: no-wrap;
+    z-index: 99;
+}
+
+

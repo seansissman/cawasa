@@ -53,7 +53,7 @@ class Command(BaseCommand):
         self.stdout.write("Wrote S&P updates to DB.")
 
     def get_or_create_sp_index(self):
-        """ Return he primary key for the S&P 500 index. """
+        """ Returns S&P 500 Index object. """
         obj, created = Index.objects.get_or_create(
             name='S&P 500',
             symbol='.INX',

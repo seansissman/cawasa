@@ -1,39 +1,44 @@
-<h1>Summary for:  {{ stock.name }}</h1>
+{% extends 'stocks/base.html' %}
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% block content %}
+<div id="main-box">
 
-<style>
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 15px;
-}
-</style>
-<table style="width:100%">
-    <tr>
-        <td>Symbol</td>
-        <td>{{ stock.symbol }}</td>
-    </tr>
-    <tr>
-        <td>Industry</td>
-        <td> {{ stock.industry }}</td>
-    </tr>
-    <tr>
-        <td>Sector</td>
-        <td> {{ stock.sector }}</td>
-    </tr>
-    <tr>
-        <td>Index(es)</td>
-        <td>
-        {% for i in stock.indexes.all %}
-           <li>{{ i }} ( {{ i.name }})</li>
-        {% endfor %}
-        </td>
-    </tr>
-        <tr>
-        <td>Type</td>
-        <td> {{ stock.type }}</td>
-    </tr>
-</table>
+    <div id="list-title">
+        <h1 style="float: left; display: inline;">Summary for {{ stock.name }}</h1>
+    </div>
+
+    <div id="data-list">
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        <style>
+            table, th, td {
+                border: 2px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 15px;
+            }
+        </style>
+        <table style="width:100%">
+            <tr>
+                <td>Symbol</td>
+                <td>{{ stock.symbol }}</td>
+            </tr>
+            <tr>
+                <td>Industry</td>
+                <td> {{ stock.industry }}</td>
+            </tr>
+            <tr>
+                <td>Sector</td>
+                <td> {{ stock.sector }}</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td> {{ stock.type }}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+{% endblock content %}

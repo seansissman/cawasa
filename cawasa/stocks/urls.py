@@ -7,7 +7,10 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 #    url(r'^(?P<stock_id>[0-9]+)/$', views.summary, name='summary'),
     url(r'^(?P<pk>[0-9]+)/$', views.SummaryView.as_view(), name='summary'),   # generic view
-#    url(r'^summary/(?P<pk>[0-9]+)$', views.SummaryView.as_view(), name='summary2'),  # generic view
+    url(r'^indexes/$', views.IndexView.as_view(), name='indexes'),  # generic view
+
+    url(r'^index_history/$', views.IndexHistoryView.as_view(), name='index_history'),
+
     url(r'^index/(?P<index_id>[0-9]+)/names/$', views.index_names, name='index_names'),
 ]
 

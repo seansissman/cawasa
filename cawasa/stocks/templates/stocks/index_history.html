@@ -1,0 +1,21 @@
+{% extends 'stocks/base.html' %}
+
+{% block content %}
+
+<div id="main-box">
+
+    <div id="list-title">
+        <h1 style="float: left; display: inline;">Stock Symbols</h1>
+    </div>
+
+    <h1>S&P 500</h1>
+    <ul>
+        {% for obj in object_list %}
+            <li><span style="margin-right:2em">{{ obj.date }} </span>
+                - <span style="margin-left:2em"> {{ obj.index }}</span></li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+{% endblock content %}
