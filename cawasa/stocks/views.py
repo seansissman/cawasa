@@ -12,8 +12,11 @@ from .forms import SymbolLookup
 
 
 def index(request):
+    """ Return rendered all stocks orderd by symbol, stock lookup form,
+        and any results from a stock lookup.
+    """
     lookup_stocks = None
-    if request.method == 'POST':  # If loaded from form submission
+    if request.method == 'POST':  # If loaded from form (symbol lookup)
         form = SymbolLookup(request.POST)  # Form object with POST data
         if form.is_valid():
             symbol_lookup = form.cleaned_data['symbol_lookup']
@@ -21,23 +24,34 @@ def index(request):
                 # Try to get an exact match on POST data
                 exact_match = Stock.objects.get(symbol__iexact=symbol_lookup)
                 return HttpResponseRedirect(exact_match.pk)
-            except:
-                #
-                lookup_stocks = Stock.objects.filter(symbol__icontains=symbol_lookup).order_by('symbol')
-                #lookup_stocksss = [str(x[0]) for x in lookup_stockss]
-                #lookup_stocks = difflib.get_close_matches(symbol_lookup, lookup_stocksss)
+            except Stock.DoesNotExist:     # If no exact match
+                lookup_stocks = Stock.objects.filter(symbol__icontains=
+                                                     symbol_lookup).order_by(
+                                                        'symbol')
                 if not lookup_stocks:
                     lookup_stocks = '0'
     else:
         form = SymbolLookup()
 
-    #all_names = Stock.objects.values_list('symbol').order_by('symbol')
     all_names = Stock.objects.order_by('symbol')
     ##template = loader.get_template('stocks/index.html')
     context = {'all_stocks_list': all_names, 'form': form, 'stock_lookup_list': lookup_stocks}
     return render(request, 'stocks/index.html', context)
-    ##return HttpResponse(template.render(context, request))
-    #return HttpResponse("Hello, world. You're at the stocks index.")
+
+
+def index_history(request, index_id):
+    """ Returns rendered historical list of stocks within an index for
+        index_id
+    """
+    ih = get_object_or_404(IndexHistory, pk=index_id)
+    context = {'index_member_history': ih}
+    return render(request, 'stocks/index_history.html', context)
+
+
+class SummaryView(generic.DetailView):
+    """ Generic View for the summary details of a stock """
+    model = Stock
+    template_name = 'stocks/summary.html'
 
 #def summary(request, stock_id):
 #    stock = get_object_or_404(Stock, pk=stock_id)
@@ -49,20 +63,28 @@ def index(request):
 #    #return HttpResponse("This will display the summary for stock with id = %s" % stock_id)
 
 
-class SummaryView(generic.DetailView):
-    model = Stock
-    template_name = 'stocks/summary.html'
-
-
 class IndexView(generic.ListView):
+    """ Generic View for a listing of recorded indexes """
     model = Index
     template_name = 'stocks/indexes.html'
 
 
-class IndexHistoryView(generic.ListView):
-    model = IndexHistory
-    template_name = 'stocks/index_history.html'
+# class IndexHistoryView(generic.ListView):
+#     model = IndexHistory
+#     context_object_name = 'index_members_history'
+#     template_name = 'stocks/index_hist# class IndexHistoryView(generic.ListView):
+#     model = IndexHistory
+#     context_object_name = 'index_members_history'
+#     template_name = 'stocks/index_history.html'
 
+    # def get_queryset(self):
+    #     self.index = get_object_or_404(IndexHistory, pk=self.args[0])
+    #     return IndexHistory.objects.filter(index=self.index)
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super(IndexHistoryView, self).get_context_data(**kwargs)
+    #     context['index'] = self.index
+    #     return context
 
 
 def index_names(request, index_id):

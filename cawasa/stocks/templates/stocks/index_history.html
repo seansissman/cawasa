@@ -4,8 +4,13 @@
 
 <div id="main-box">
 
+    <div>
+        {% for index in index_member_history %}
+            <h2> {{ index }}</h2>
+        {% endfor %}
+    </div>
     <div id="list-title">
-        <h1 style="float: left; display: inline;">Stock Symbols</h1>
+        <h1 style="float: left; display: inline;">{{ object.index }}</h1>
     </div>
 
     <h1>S&P 500</h1>

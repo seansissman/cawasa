@@ -30,7 +30,7 @@
         {% for index in object_list %}
             <ul style="list-style-type: none">
                 <li>
-                    <a class="list" href="none">
+                    <a class="list" href="{% url 'stocks:index_history' index.id %}">
                         <div class="symbol-box">{{ index.symbol }}</div>
                         <div class="gap-box">--</div>
                         <div class="name-box">{{ index.name }}</div>
