@@ -4,104 +4,46 @@ from bs4 import BeautifulSoup
 from urllib2 import urlopen
 import datetime
 import contextlib
-#
 
 class Command(BaseCommand):
     help = 'Updates the list of names in the Russell 2000 index.'
 
     def handle(self, *args, **options):
+        if self.is_update_needed():     # R2k only rebalances once per year
+            r2k_index_obj = self.get_or_create_r2k_index()
+            r2k_url = "http://www.barchart.com/stocks/russell2000.php?_dtp1=0"
+            stocks = self.get_r2k_names(r2k_url)
 
-        r2k_index_obj = self.get_or_create_r2k_index()
-        r2k_url = "http://www.barchart.com/stocks/russell2000.php?_dtp1=0"
-        stocks = self.get_r2k_names(r2k_url)
+            gf_url = "https://www.google.com/finance?q=nyse:"
+            stock_objs = self.get_stock_obj(stocks, gf_url)
 
-        gf_url = "https://www.google.com/finance?q=nyse:"
-        stock_objs = self.get_stock_obj(stocks, gf_url)
+            # Today's date
+            date = datetime.date.today()
 
-        # Today's date
-        date = datetime.date.today()
+            for stock_obj in stock_objs:
+                 IndexHistory.objects.get_or_create(date=date,
+                                                    index=r2k_index_obj,
+                                                    stock=stock_obj)
 
-        for stock_obj in stock_objs:
-             IndexHistory.objects.get_or_create(date=date,
-                                                index=r2k_index_obj,
-                                                stock=stock_obj)
+            self.stdout.write("Wrote current Russell 2000 names to "
+                              "IndexHistory for " + date.strftime("%m/%d/%Y") +
+                              ".")
 
-        self.stdout.write("Wrote current Russell 2000 names to IndexHistory "
-                          "for " + date.strftime("%m/%d/%Y") + ".")
+    def is_update_needed(self):
+        """ Returns True if database doesn't contain the
+            latest reconstitution """
+        try:
+            latest = IndexHistory.objects.filter(
+                index__symbol__iexact='.IUX').order_by('-date')[0]
+        except IndexError:
+            return True
+        return latest.date.year < datetime.date.today().year
 
-        # for stock in stocks:
-        #     symbol = stock[0].string
-        #     name = stock[1].string
-        #     try:
-        #         sector = stock[2].string
-        #         industry = stock[3].string
-        #     except IndexError:
-        #         sector = '?'
-        #         industry = '?'
-        #     print stock
-
-
-# class Command(BaseCommand):
-#     help = 'Updates the list of names in the S&P 500 index.'
-#
-#     def handle(self, *args, **options):
-#
-#         # Get (or create if doesn't exist) the Index object.
-#         r2k_index_obj = self.get_or_create_r2k_index()
-#
-#         # URL of the data source
-#         r2k_url = "http://www.barchart.com/stocks/russell2000.php?_dtp1=0"
-#
-#         # Today's date
-#         date = datetime.date.today()
-#
-#         with contextlib.closing(urlopen(r2k_url)) as source_page:
-#             # Create an html parser
-#             soup = BeautifulSoup(source_page, 'html.parser')
-#             # Find the table with our data
-#             table = soup.find("table", {"class": "datatable ajax"})
-#             if table:
-#                 print "FOUND TABLE"
-#             else:
-#                 print "DID NOT FIND TABLE!!!"
-#             # Fail now if we haven't found the right table
-#             symbols = table.findAll('td', {"class": "ds_symbol"})
-#             names = table.findall('td', {"class": "ds_name"})
-#             print symbols
-
-        #     header = table.findAll('th')
-        #     if header[0].string != "Ticker symbol" or \
-        #                                         header[1].string != "Security":
-        #         raise Exception("Can't parse wikipedia's table!")
-        #
-        # # Retreive the values in the table
-        # rows = table.findAll('tr')
-        # for row in rows:
-        #     fields = row.findAll('td')
-        #     if fields:
-        #         symbol = fields[0].string
-        #         name = fields[1].string
-        #         sector = fields[3].string
-        #         industry = fields[4].string
-        #         stock_obj, _ = Stock.objects.get_or_create(
-        #                                                     name=name,
-        #                                                     symbol=symbol,
-        #                                                     sector=sector,
-        #                                                     industry=industry)
-        #
-        #         # Creates the IndexHistory object if it doesn't exist
-        #         IndexHistory.objects.get_or_create(date=date,
-        #                                            index=sp_index_obj,
-        #                                            stock=stock_obj)
-        #
-        # self.stdout.write("Wrote current S&P500 names to IndexHistory for " +
-        #                   date.strftime("%m/%d/%Y") + ".")
-    #
 
     def get_stock_obj(self, stocks, url):
         """ Returns a list of Stock objects. """
         stock_objs = []
-        for stock in stocks[:5]:
+        for stock in stocks:
             symbol = stock[0]
             name = stock[1]
             stock_obj = None
