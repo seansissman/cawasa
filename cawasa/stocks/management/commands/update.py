@@ -63,11 +63,12 @@ class Command(BaseCommand):
         rows = table.findAll('tr')
         for row in rows:
             values = row.findAll('td')
-            if values:
-                symbol = values[0].string
-                name = values[1].string
-                sector = values[3].string
-                industry = values[4].string
+            if len(values) > 4:
+                symbol, name, _, sector, industry = values[:5]
+                # symbol = values[0].string
+                # name = values[1].string
+                # sector = values[3].string
+                # industry = values[4].string
 
                 # Create a Stock object based on the fields
                 stock_obj, _ = Stock.objects.get_or_create(
